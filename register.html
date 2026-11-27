@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniStay & Care - Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        .input-group {
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+            background-color: white;
+        }
+        .input-group input:focus, .input-group select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>UniStay & Care</h2>
+        <p style="margin-bottom: 20px;">Create Account</p>
+        
+        <form action="/register" method="POST">
+            <div class="input-group">
+                <select name="role" id="roleSelect" onchange="toggleInterface()" required>
+                    <option value="" disabled selected>Select Your Role</option>
+                    <option value="student">Student</option>
+                    <option value="warden">Warden</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <input type="text" name="fullname" placeholder="Full Name" required>
+            </div>
+
+            <div class="input-group">
+                <input type="text" name="unique_id" id="dynamicIdInput" placeholder="ID / Index No" required>
+            </div>
+
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <div class="input-group">
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+            
+            <button type="submit" class="login-btn">Register</button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 20px; width: 100%;">
+            <p style="font-size: 14px; color: #555; margin: 0; display: inline-block;">
+                Already have an account? 
+                <a href="/" style="color: #0056b3; text-decoration: none; font-weight: bold; margin-left: 5px;">Login here</a>
+            </p>
+        </div>
+        
+    </div>
+
+    <script>
+        function toggleInterface() {
+            var role = document.getElementById("roleSelect").value;
+            var idInput = document.getElementById("dynamicIdInput");
+            
+            if (role === "student") {
+                idInput.placeholder = "Index No";
+            } else if (role === "warden") {
+                idInput.placeholder = "Warden ID / Staff ID";
+            }
+        }
+    </script>
+</body>
+</html>

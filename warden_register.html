@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniStay - Warden Registration</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .register-card {
+            width: 100%;
+            max-width: 480px;
+            border: none;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card register-card shadow-sm bg-white p-4">
+        <div class="text-center mb-4">
+            <i class="fa-solid fa-user-shield text-success fa-3x mb-2"></i>
+            <h3 class="fw-bold text-dark">Warden Account</h3>
+            <p class="text-muted small">Register as an Official Warden</p>
+        </div>
+
+        <form action="/register/warden" method="POST">
+            
+            <input type="hidden" name="role" value="warden">
+
+            <div class="mb-3">
+                <input type="text" name="fullname" class="form-control form-control-lg fs-6" placeholder="Full Name" required>
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name="unique_id" class="form-control form-control-lg fs-6" placeholder="Warden ID (e.g., WD0005)" required>
+            </div>
+
+            <div class="mb-3">
+                <input type="email" name="email" class="form-control form-control-lg fs-6" placeholder="Email Address" required>
+            </div>
+
+            <div class="mb-3">
+                <input type="password" name="password" class="form-control form-control-lg fs-6" placeholder="Password" required>
+            </div>
+
+            <div class="mb-4">
+                <input type="password" name="confirm_password" class="form-control form-control-lg fs-6" placeholder="Confirm Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm mb-3">Register as Warden</button>
+
+            <div class="text-center">
+                <p class="small text-muted mb-0">Back to login? <a href="/" class="text-decoration-none fw-bold text-success">Login here</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

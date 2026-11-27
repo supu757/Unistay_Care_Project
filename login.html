@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniStay & Care - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        .input-group {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box; 
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>UniStay & Care</h2>
+        <p>Hostel Welfare & Attendance System</p>
+        
+        <form action="/" method="POST">
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Username / Index No" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 25px; width: 100%;">
+            <p style="font-size: 14px; color: #555; margin: 0; display: inline-block;">
+                Don't have an account? 
+                <a href="/register" style="color: #0056b3; text-decoration: none; font-weight: bold; margin-left: 5px;">Register here</a>
+            </p>
+        </div>
+        
+    </div>
+</body>
+</html>

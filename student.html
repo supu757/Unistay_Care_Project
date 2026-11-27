@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniStay - Student Portal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .section-title {
+            background-color: #f8f9fa;
+            padding: 8px 12px;
+            border-left: 5px solid #198754;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        .dashboard-card {
+            transition: transform 0.2s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+       
+        .btn-xs {
+            padding: 1px 5px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+        <div class="container">
+            <a class="navbar-brand" href="/student"><i class="fa-solid fa-hotel me-2"></i>UniStay Student Portal</a>
+            <div class="ms-auto d-flex align-items-center">
+                <a href="/student" class="btn btn-outline-light btn-sm me-2"><i class="fa-solid fa-house me-1"></i> Dashboard</a>
+                <span class="navbar-text text-white me-3">Welcome, <strong>{{ name }}</strong></span>
+                <a href="/logout" class="btn btn-outline-danger btn-sm">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 mb-5">
+        
+        {% if view == 'dashboard' %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="p-5 mb-4 bg-white rounded-3 shadow-sm border-0">
+                    <div class="container-fluid py-2">
+                        <h1 class="display-5 fw-bold text-success">Hello, {{ name }}!</h1>
+                        <p class="col-md-8 fs-4 text-muted">Welcome to your UniStay Student Portal. Manage your profile, attendance, and welfare facilities efficiently.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0 dashboard-card">
+                    <div class="card-body p-4 text-center d-flex flex-column justify-content-between">
+                        <div>
+                            <i class="fa-solid fa-bed text-success fa-3x mb-3"></i>
+                            <h4 class="card-title fw-bold">Hostel Room Status</h4>
+                            <p class="text-muted">Your currently allocated hostel room information.</p>
+                            <h2 class="my-3">
+                                {% if room == "Not Applied" %}
+                                    <span class="badge bg-warning text-dark">Not Allocated Yet</span>
+                                {% else %}
+                                    <span class="badge bg-success text-white">Room No: {{ room }}</span>
+                                {% endif %}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0 dashboard-card">
+                    <div class="card-body p-4 text-center d-flex flex-column justify-content-between">
+                        <div>
+                            <i class="fa-solid fa-user-gear text-primary fa-3x mb-3"></i>
+                            <h4 class="card-title fw-bold">Profile & Exam Details</h4>
+                            <p class="text-muted">View or update your personal details, parent info, O/L, and A/L results.</p>
+                        </div>
+                        <div class="mt-3">
+                            <a href="/student/profile" class="btn btn-success w-100 py-2 fw-bold">
+                                <i class="fa-solid fa-file-signature me-2"></i>View / Edit Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0 dashboard-card">
+                    <div class="card-body p-4 text-center d-flex flex-column justify-content-between">
+                        <div>
+                            <i class="fa-solid fa-calendar-check text-info fa-3x mb-3"></i>
+                            <h4 class="card-title fw-bold">Student Attendance</h4>
+                            <p class="text-muted">Check your daily hostel attendance logs and monthly percentages.</p>
+                        </div>
+                        <div class="mt-3">
+                            <a href="/student/attendance" class="btn btn-info text-white w-100 py-2 fw-bold">
+                                <i class="fa-solid fa-clipboard-user me-2"></i>View Attendance
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0 dashboard-card">
+                    <div class="card-body p-4 text-center d-flex flex-column justify-content-between">
+                        <div>
+                            <i class="fa-solid fa-hand-holding-dollar text-warning fa-3x mb-3"></i>
+                            <h4 class="card-title fw-bold">Problem & Bursary</h4>
+                            <p class="text-muted">Submit complaints regarding hostel facilities or track student welfare/bursary allocations.</p>
+                        </div>
+                        <div class="mt-3">
+                            <a href="/student/bursary" class="btn btn-warning text-white w-100 py-2 fw-bold">
+                                <i class="fa-solid fa-circle-exclamation me-2"></i>Welfare & Complaints
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+
+        {% if view == 'profile' %}
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fa-solid fa-file-invoice me-2"></i>Student Registration & Exam Details Form</h4>
+            </div>
+            <div class="card-body p-4">
+                <form action="/save_profile" method="POST">
+                    <div class="section-title text-success">1. Personal Details</div>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="fullname" class="form-control" required value="{{ profile.fullname if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Name with Initials</label>
+                            <input type="text" name="name_initials" class="form-control" required value="{{ profile.name_initials if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" name="dob" class="form-control" required value="{{ profile.dob if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">District</label>
+                            <input type="text" name="district" class="form-control" required value="{{ profile.district if profile else '' }}" placeholder="Ex: Colombo">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Nearest Town</label>
+                            <input type="text" name="town" class="form-control" required value="{{ profile.town if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Distance to ITUM (km) <span class="text-danger">*</span></label>
+                            <input type="number" name="distance_itum" class="form-control" required value="{{ profile.distance_itum if profile else '' }}" min="0">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Religion</label>
+                            <input type="text" name="religion" class="form-control" value="{{ profile.religion if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Nation</label>
+                            <input type="text" name="nation" class="form-control" value="{{ profile.nation if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" name="phone" class="form-control" required value="{{ profile.phone if profile else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="section-title text-success">2. Parent Details</div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Mother's Name</label>
+                            <input type="text" name="mother_name" class="form-control" value="{{ profile.mother_name if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Mother's Phone Number</label>
+                            <input type="tel" name="mother_phone" class="form-control" value="{{ profile.mother_phone if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Mother's Occupation</label>
+                            <input type="text" name="mother_job" class="form-control" value="{{ profile.mother_job if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Father's Name</label>
+                            <input type="text" name="father_name" class="form-control" value="{{ profile.father_name if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Father's Phone Number</label>
+                            <input type="tel" name="father_phone" class="form-control" value="{{ profile.father_phone if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Father's Occupation</label>
+                            <input type="text" name="father_job" class="form-control" value="{{ profile.father_job if profile else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="section-title text-success">3. O/L Exam Results</div>
+                    <div class="row bg-light p-3 rounded mb-3 mx-1">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">O/L Year</label>
+                            <input type="number" name="ol_year" class="form-control" value="{{ profile.ol_year if profile else '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">O/L Index Number</label>
+                            <input type="text" name="ol_index" class="form-control" value="{{ profile.ol_index if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Science</label><input type="text" name="ol_science" class="form-control" maxlength="2" value="{{ profile.ol_science if profile else '' }}"></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Mathematics</label><input type="text" name="ol_maths" class="form-control" maxlength="2" value="{{ profile.ol_maths if profile else '' }}"></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">English</label><input type="text" name="ol_english" class="form-control" maxlength="2" value="{{ profile.ol_english if profile else '' }}"></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Religion</label><input type="text" name="ol_religion" class="form-control" maxlength="2" value="{{ profile.ol_religion if profile else '' }}"></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Language (Sinhala/Tamil)</label><input type="text" name="ol_language" class="form-control" maxlength="2" value="{{ profile.ol_language if profile else '' }}"></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">History</label><input type="text" name="ol_history" class="form-control" maxlength="2" value="{{ profile.ol_history if profile else '' }}"></div>
+                        
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Basket 1 Subject Name</label>
+                            <input type="text" name="ol_basket1_name" class="form-control text-muted" placeholder="Subject 01" value="{{ profile.ol_basket1_name if profile else '' }}">
+                            <input type="text" name="ol_basket1_grade" class="form-control mt-1" placeholder="Grade" maxlength="2" value="{{ profile.ol_basket1_grade if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Basket 2 Subject Name</label>
+                            <input type="text" name="ol_basket2_name" class="form-control text-muted" placeholder="Subject 02" value="{{ profile.ol_basket2_name if profile else '' }}">
+                            <input type="text" name="ol_basket2_grade" class="form-control mt-1" placeholder="Grade" maxlength="2" value="{{ profile.ol_basket2_grade if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Basket 3 Subject Name</label>
+                            <input type="text" name="ol_basket3_name" class="form-control text-muted" placeholder="Subject 03" value="{{ profile.ol_basket3_name if profile else '' }}">
+                            <input type="text" name="ol_basket3_grade" class="form-control mt-1" placeholder="Grade" maxlength="2" value="{{ profile.ol_basket3_grade if profile else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="section-title text-success">4. A/L Exam Results</div>
+                    <div class="row bg-light p-3 rounded mb-3 mx-1">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">A/L Year</label>
+                            <input type="number" name="al_year" class="form-control" value="{{ profile.al_year if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">A/L Index Number</label>
+                            <input type="text" name="al_index" class="form-control" value="{{ profile.al_index if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Z-Score</label>
+                            <input type="text" name="al_zscore" class="form-control" placeholder="Ex: 1.5432" value="{{ profile.al_zscore if profile else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Combined Mathematics / Biology</label><input type="text" name="al_maths" class="form-control" maxlength="2" value="{{ profile.al_maths if profile else '' }}"></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Physics</label><input type="text" name="al_physics" class="form-control" maxlength="2" value="{{ profile.al_physics if profile else '' }}"></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Chemistry / ICT</label><input type="text" name="al_chemistry" class="form-control" maxlength="2" value="{{ profile.al_chemistry if profile else '' }}"></div>
+                    </div>
+
+                    <div class="mt-4 text-end">
+                        <a href="/student" class="btn btn-outline-secondary me-2"><i class="fa-solid fa-arrow-left me-1"></i> Back to Dashboard</a>
+                        <button type="button" class="btn btn-secondary me-2" onclick="window.location.reload();">Reset Form</button>
+                        <button type="submit" class="btn btn-success px-5 fw-bold">
+                            <i class="fa-solid fa-floppy-disk me-2"></i>Save Profile & Exam Details
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+
+        {% if view == 'attendance' %}
+        <div class="card shadow border-0">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="fa-solid fa-clipboard-user me-2"></i>Hostel Attendance & Movement Logs</h4>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted">Review your official hostel departure and arrival history or add a new record below.</p>
+                
+                <ul class="nav nav-tabs mb-4" id="attendanceTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-bold text-dark" id="home-tab" data-bs-toggle="tab" data-bs-target="#goHomeSection" type="button" role="tab">
+                            <i class="fa-solid fa-house-medical text-danger me-2"></i>Go Home Logs
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold text-dark" id="out-tab" data-bs-toggle="tab" data-bs-target="#goOutSection" type="button" role="tab">
+                            <i class="fa-solid fa-door-open text-warning me-2"></i>Go Out Logs
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="attendanceTabsContent">
+                    
+                    <div class="tab-pane fade show active" id="goHomeSection" role="tabpanel">
+                        <div class="card bg-light p-3 mb-4 border-0 shadow-sm">
+                            <h5 class="fw-bold text-danger"><i class="fa-solid fa-plus me-1"></i> Log Go-Home Request</h5>
+                            <form action="/attendance/go_home/leave" method="POST" class="row g-2 align-items-end">
+                                <div class="col-md-5">
+                                    <label class="small fw-bold">Departure Date</label>
+                                    <input type="date" name="dep_date" class="form-control form-control-sm" required>
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="small fw-bold">Departure Time</label>
+                                    <input type="time" name="dep_time" class="form-control form-control-sm" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-danger btn-sm w-100 fw-bold"><i class="fa-solid fa-paper-plane me-1"></i> Leave</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped align-middle shadow-sm text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Departure Date</th>
+                                        <th>Departure Time</th>
+                                        <th>Arrival Date</th>
+                                        <th>Arrival Time</th>
+                                        <th>Status / Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if go_home_list %}
+                                        {% for log in go_home_list %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ log.departure_date }}</td>
+                                            <td>{{ log.departure_time }}</td>
+                                            <td>{{ log.arrival_date if log.arrival_date else '-' }}</td>
+                                            <td>{{ log.arrival_time if log.arrival_time else '-' }}</td>
+                                            <td>
+                                                {% if log.status == 'Returned' %}
+                                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                                        <span class="badge bg-success px-2 py-1">Returned</span>
+                                                        
+                                                        <a href="/attendance/go_home/undo/{{ log.id }}" class="btn btn-xs btn-outline-danger py-0 px-2 fw-bold d-flex align-items-center" 
+                                                           onclick="return confirm('Are you sure you want to UNDO this Mark Returned action?');" style="font-size: 0.75rem;">
+                                                            <i class="fa-solid fa-arrow-rotate-left me-1"></i> Undo
+                                                        </a>
+                                                    </div>
+                                                {% else %}
+                                                    <form action="/attendance/go_home/return" method="POST" class="d-inline">
+                                                        <input type="hidden" name="log_id" value="{{ log.id }}">
+                                                        <button type="submit" class="btn btn-outline-success btn-xs py-0 fw-bold px-2">Mark Returned</button>
+                                                    </form>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted py-4">No Go-Home records found.</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="goOutSection" role="tabpanel">
+                        <div class="card bg-light p-3 mb-4 border-0 shadow-sm">
+                            <h5 class="fw-bold text-warning"><i class="fa-solid fa-plus me-1"></i> Log Go-Out Record</h5>
+                            <form action="/attendance/go_out/leave" method="POST" class="row g-2 align-items-end">
+                                <div class="col-md-5">
+                                    <label class="small fw-bold">Out Date</label>
+                                    <input type="date" name="out_date" class="form-control form-control-sm" required>
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="small fw-bold">Out Time</label>
+                                    <input type="time" name="out_time" class="form-control form-control-sm" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-warning text-white btn-sm w-100 fw-bold"><i class="fa-solid fa-door-open me-1"></i> Go Out</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped align-middle shadow-sm text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Out Date</th>
+                                        <th>Out Time</th>
+                                        <th>In Date</th>
+                                        <th>In Time</th>
+                                        <th>Status / Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if go_out_list %}
+                                        {% for log in go_out_list %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ log.out_date }}</td>
+                                            <td>{{ log.out_time }}</td>
+                                            <td>{{ log.in_date if log.in_date else '-' }}</td>
+                                            <td>{{ log.in_time if log.in_time else '-' }}</td>
+                                            <td>
+                                                {% if log.status == 'Inside' %}
+                                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                                        <span class="badge bg-success px-2 py-1">Inside</span>
+                                                        
+                                                        <a href="/attendance/go_out/undo/{{ log.id }}" class="btn btn-xs btn-outline-danger py-0 px-2 fw-bold d-flex align-items-center" 
+                                                           onclick="return confirm('Are you sure you want to UNDO this Mark In-Hostel action?');" style="font-size: 0.75rem;">
+                                                            <i class="fa-solid fa-arrow-rotate-left me-1"></i> Undo
+                                                        </a>
+                                                    </div>
+                                                {% else %}
+                                                    <form action="/attendance/go_out/return" method="POST" class="d-inline">
+                                                        <input type="hidden" name="log_id" value="{{ log.id }}">
+                                                        <button type="submit" class="btn btn-outline-primary btn-xs py-0 fw-bold px-2">Mark In-Hostel</button>
+                                                    </form>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted py-4">No Go-Out records found.</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-4 text-end">
+                    <a href="/student" class="btn btn-secondary"><i class="fa-solid fa-arrow-left me-1"></i> Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+
+        {% if view == 'bursary' %}
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card shadow border-0 p-4 mb-4">
+                    <div class="text-center">
+                        <i class="fa-solid fa-money-check-dollar text-warning fa-3x mb-3"></i>
+                        <h5 class="fw-bold">Bursary Allocation Status</h5>
+                        <hr>
+                        
+                        <h3 class="my-3">
+                            {% if welfare and welfare.bursary_status == 'Approved' %}
+                                <span class="badge bg-success"><i class="fa-solid fa-circle-check me-1"></i>Welfare Approved</span>
+                            {% elif welfare and welfare.bursary_status == 'Rejected' %}
+                                <span class="badge bg-danger">Rejected</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% endif %}
+                        </h3>
+                        <p class="small text-muted mb-4">Handled by the University Student Welfare Branch.</p>
+                    </div>
+
+                    <div class="bg-light p-3 rounded border shadow-sm">
+                        <form action="/save_bursary_status" method="POST">
+                            <h6 class="fw-bold text-center text-dark mb-3">Update Monthly Declaration</h6>
+                            
+                            <div class="row g-2 mb-3">
+                                <div class="col-sm-6">
+                                    <label class="form-label small fw-bold">Select Month</label>
+                                    <select name="bursary_month" class="form-select form-select-sm fw-bold" required>
+                                        <option value="January">January</option>
+                                        <option value="February">February</option>
+                                        <option value="March">March</option>
+                                        <option value="April">April</option>
+                                        <option value="May">May</option>
+                                        <option value="June">June</option>
+                                        <option value="July">July</option>
+                                        <option value="August">August</option>
+                                        <option value="September">September</option>
+                                        <option value="October">October</option>
+                                        <option value="November">November</option>
+                                        <option value="December">December</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <label class="form-label small fw-bold">Received Status</label>
+                                    <select name="monthly_status" class="form-select form-select-sm fw-bold" required>
+                                        <option value="NO">❌ NO</option>
+                                        <option value="YES">✅ YES</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-dark btn-sm w-100 fw-bold">
+                                <i class="fa-solid fa-floppy-disk me-1"></i> Update Status
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card shadow border-0 p-3">
+                    <h6 class="fw-bold text-secondary mb-3"><i class="fa-solid fa-history me-1"></i> Your Monthly Declaration History</h6>
+                    <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                        <table class="table table-sm table-bordered table-striped align-middle text-center mb-0 small">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Received Status</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if view == 'complain' %}
+        <div class="card shadow border-0">
+            <div class="card-header bg-warning text-dark fw-bold">
+                <h4 class="mb-0"><i class="fa-solid fa-bullhorn me-2"></i>Hostel Complaints & Requests</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted">Submit your issues regarding room maintenance, electricity, water, or other facilities below.</p>
+        
+            <div class="card bg-light p-3 mb-4 border-0 shadow-sm">
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-pen-to-square me-1"></i> File a New Complaint</h5>
+                <form action="/student/complain/submit" method="POST" class="mt-3">
+                    <div class="mb-3">
+                        <label class="small fw-bold form-label">Complaint Category</label>
+                        <select name="category" class="form-select form-select-sm" required>
+                            <option value="Electricity">Electricity (විදුලිය)</option>
+                            <option value="Plumbing/Water">Plumbing & Water (ජලය/නල පද්ධති)</option>
+                            <option value="Furniture/Room">Furniture & Room (කාමරයේ බඩු බාහිරාදිය)</option>
+                            <option value="Wifi/Internet">Internet & Wifi</option>
+                            <option value="Other">Other (වෙනත්)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold form-label">Description (විස්තරය)</label>
+                        <textarea name="description" class="form-control form-control-sm" rows="3" placeholder="Describe your issue clearly..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-warning text-dark fw-bold btn-sm"><i class="fa-solid fa-paper-plane me-1"></i> Submit Complaint</button>
+                </form>
+            </div>
+
+            <h5 class="fw-bold text-secondary mb-3"><i class="fa-solid fa-clock-rotate-left me-1"></i> Your Complaint History</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle text-center shadow-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Submitted Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if complaint_list %}
+                            {% for comp in complaint_list %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td><span class="badge bg-secondary">{{ comp['category'] }}</span></td>
+                                <td class="text-start">{{ comp['description'] }}</td>
+                                <td>{{ comp['sub_date'] }}</td>
+                                <td>
+                                    {% if comp['status'] == 'Pending' %}
+                                        <span class="badge bg-danger">Pending</span>
+                                    {% elif comp['status'] == 'In Progress' %}
+                                        <span class="badge bg-warning text-dark">In Progress</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Resolved</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">You haven't submitted any complaints yet.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+             </div>
+
+            <div class="mt-4 text-end">
+                <a href="/student/attendance" class="btn btn-secondary"><i class="fa-solid fa-arrow-left me-1"></i> Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
